@@ -37,7 +37,7 @@ _CVML_ is a markup language for the [pdfkit](http://pdfkit.org) module, but can 
       = = <-- Separator
 
       - Email
-        [e.ex@example.com](mailto:e.ex@example)
+        [e.ex@example.com](mailto:e.ex@example.com) <-- markdown link
 
 Preview output using default template:
 
