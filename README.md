@@ -10,7 +10,7 @@ _CVML_ is a markup language for the [pdfkit](http://pdfkit.org) module, but can 
 
 - Do you really think YOUR (two column) CV layout is the ultimate layout there is?
   
-    No, I don't. There will be means of creating your own layout if you wish. This project was started primarily out of a need that I have discovered for myself, which explains why things look a certain why, but doesn't mean that I wasn't open for suggestions.
+    No, I don't. There will be means of creating your own layout if you wish. This project was started primarily out of a need that I have discovered for myself, which explains why things look a certain way, but doesn't mean I wasn't open for suggestions.
 
 - Is this really necessary? Why not just use plain / _markdown_ flavour XY instead?
 
