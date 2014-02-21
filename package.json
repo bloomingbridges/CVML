@@ -1,0 +1,10 @@
+{
+  "name": "CVML",
+  "description": "Curriculum Vitae Markup Language Specification, Interpreter and PDF generator",
+  "dependencies": {
+    "marked": "*",
+    "yamljs": "*",
+    "hogan.js": "*",
+    "pdfkit": "*"
+  }
+}
