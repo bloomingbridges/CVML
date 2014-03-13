@@ -16,13 +16,13 @@
                 <thead>
                     <tr class="section_header">
                         <th class="empty"></th>
-                        <th>{{section}}</th>
+                        <th>{{{section}}}</th>
                     </tr>   
                 </thead>
                 <tbody>
                     {{#items}}
                     <tr class="item">
-                        <td class="label">{{label}}</td>
+                        <td class="label">{{{label}}}</td>
                         <td>{{{content}}}</td>
                     </tr>
                     {{/items}}

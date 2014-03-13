@@ -65,7 +65,7 @@ function loadTemplate(name) {
 
 function generateHTML(template, data) {
   var buffer = template.render(data);
-  if (cmd.verbose) console.log("### PREVIEW\n", buffer, "\n### EOF");
+  // if (cmd.verbose) console.log("### PREVIEW\n", buffer, "\n### EOF");
   fs.writeFile(data.metadata.name.replace(/ /gi, "_")+'_CV.html', buffer, function (err) {
     if (err) throw err;
     console.log("### HTML GENERATED!");
@@ -110,7 +110,7 @@ if (cmd.html) {
   generateHTML(template, content);
 } 
 else {
-  if (cmd.verbose) console.log("Producing PDF..");
+  // if (cmd.verbose) console.log("### PRODUCING PDF..", content);
 }
 
 
