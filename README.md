@@ -45,10 +45,11 @@ Preview output using default template:
 
 ### (Envisioned) Usage
 
-    $ cvml file.cvml [options]
+    $ node cvml.js [options] <myfilename.cvml>
 
-    -t [template]  Give name or path to template file
-    -v             Verbose Mode
+    -h, --help                 output usage information
+    -v, --verbose              Enable "Verbose Output"
+    -t, --template [template]  Define a template other than the default one
 
-    --html         Produces a HTML preview (default)
-    --pdf          Produces a PDF file instead
+    -p, --pdf                  Produces a PDF (default)
+    -w, --html                 Produces a HTML document instead
