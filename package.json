@@ -1,9 +1,14 @@
 {
   "name": "CVML",
+  "repository" : { 
+    "type" : "git", 
+    "url" : "https://github.com/bloomingbridges/CVML.git"
+  }
   "description": "Curriculum Vitae Markup Language Specification, Interpreter and PDF generator",
   "dependencies": {
     "marked": "*",
-    "yamljs": "*",
+    "commander": "*",
+    "front-matter": "*",
     "hogan.js": "*",
     "pdfkit": "*"
   }
