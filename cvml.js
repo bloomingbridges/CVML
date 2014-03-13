@@ -20,7 +20,7 @@ var exampleData = {
   metadata: {
     name: "Edgar Exampleson",
     title: "Curriculum Vitae",
-    cssPath: "layouts/bloomingbridges.css"
+    cssPath: "layouts/default.css"
   },
   contents: [
     {
