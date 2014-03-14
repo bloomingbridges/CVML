@@ -97,11 +97,11 @@ if (cmd.args.length > 0) {
     content = cvp(data);
     if (content && cmd.verbose) console.log("### MARKUP OKAY!");
   } else {
-    console.log("ERROR CVML file not found! Proceeding using example data..");
+    console.log("### ERROR CVML file not found! Proceeding using example data..");
     content = exampleData;
   }
 } else {
-  console.log("ERROR No CVML file specified! Proceeding using example data..");
+  console.log("### ERROR No CVML file specified! Proceeding using example data..");
   content = exampleData;
 }
 

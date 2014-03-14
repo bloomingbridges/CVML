@@ -8,7 +8,7 @@
 
         <section id="container">
 
-        <h1>{{metadata.title}}</h1>
+        <h1>Curriculum Vitae</h1>
 
             {{#contents}}
 

@@ -88,6 +88,9 @@ CVMLParser.prototype.parseContents = function(buffer) {
 
         case CVMLModifier.SECTION:
           if (typeof section === "object" && section.items.length > 0) {
+            if (item.content !== "") {
+              section.items.push(item);
+            }
             contents.push(section);
           }
           section = { section: marked(line.body), items: [] };
@@ -99,9 +102,9 @@ CVMLParser.prototype.parseContents = function(buffer) {
           break;
 
         case CVMLModifier.LABEL:
-          if (item.label !== "" && typeof section === "object") {
+          if (item.label !== "") {
             section.items.push(item);
-            item = { label: "", content: "" }
+            item = {};
           } else {
             item.label = marked(line.body);
           }
@@ -116,13 +119,15 @@ CVMLParser.prototype.parseContents = function(buffer) {
           break;
 
         case CVMLModifier.PLAIN: 
-          item.content = marked(line.body);
-          section.items.push(item);
-          item = {label: "", content: ""};
+            item.content += marked(line.body);
           break;
 
         default:
           // console.log("### SKIPPING..");
+      }
+      if (item.content !== "") {
+        section.items.push(item);
+        item = {label: "", content: ""};
       }
     } 
     l++;
