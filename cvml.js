@@ -4,7 +4,7 @@
 var fs = require("fs")
   , cmd = require("commander")
   , Hogan  = require("hogan.js")
-  , pdfkit = require("pdfkit");
+  , PDFDocument = require("pdfkit");
 
 
 
@@ -72,6 +72,50 @@ function generateHTML(template, data) {
   });
 }
 
+function generatePDF(template, data) {
+  var doc = new PDFDocument( { size: "a4", margins: { top: 50, right: 20, bottom: 15, left: 15 } } );
+  doc.info.Title = data.metadata.title;
+  doc.fillColor('#666');
+  doc.fontSize(18);
+  // doc.moveDown();
+  doc.text("Curriculum Vitae", { align: 'right' });
+  doc.fillColor('#000');
+  for (var i=0; i < data.contents.length; i++) {
+    var section = data.contents[i];
+    doc.fontSize(22);
+    doc.moveDown();
+    doc.text(section.section, { align: 'right' });
+    doc.rect(0,doc.y,700,3);
+    doc.fill('#D289E3');
+    doc.moveDown();
+    for (var j=0; j < section.items.length; j++) {
+      var item = section.items[j];
+      if (item.hasOwnProperty("class") && item.class === "emphasis") {
+        doc.fontSize(18);
+      }
+      else if (item.hasOwnProperty("class") && item.class === "separator") {
+        doc.rect(140,doc.y-2,580,1);
+        doc.fill('#ededed');
+        doc.moveDown();
+      }
+      else {
+        doc.fontSize(12);
+      }
+      doc.fillColor('#666');
+      doc.text(item.label, { width: 120, align: 'right' });
+      doc.fillColor('#000');
+      doc.save();
+      doc.moveUp();
+      doc.translate(140, 0);
+      doc.text(item.content, { width: 400, lineGap: 6 });
+      doc.restore();
+      doc.moveDown();
+    }
+  }
+  doc.write(data.metadata.name.replace(/ /gi, "_")+'_CV.pdf');
+  if (cmd.verbose) console.log("### DONE!");
+}
+
 
 
 // CLI ////////////////////////////////////////////////////////////////////////
@@ -94,7 +138,7 @@ if (cmd.args.length > 0) {
     if (cmd.verbose) console.log("### READING FILE..");
     var data = fs.readFileSync("./"+file, 'utf8');
     if (cmd.verbose) console.log("### PARSING MARKUP..");
-    content = cvp(data);
+    content = cvp(data, cmd.html);
     if (content && cmd.verbose) console.log("### MARKUP OKAY!");
   } else {
     console.log("### ERROR CVML file not found! Proceeding using example data..");
@@ -110,7 +154,8 @@ if (cmd.html) {
   generateHTML(template, content);
 } 
 else {
-  // if (cmd.verbose) console.log("### PRODUCING PDF..", content);
+  if (cmd.verbose) console.log("### PRODUCING PDF..");
+  generatePDF(null, content);
 }
 
 

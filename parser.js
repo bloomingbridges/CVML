@@ -93,11 +93,11 @@ CVMLParser.prototype.parseContents = function(buffer) {
             }
             contents.push(section);
           }
-          section = { section: marked(line.body), items: [] };
+          section = { section: line.body, items: [] };
           break;
 
         case CVMLModifier.EMPHASIS:
-          item.label = marked(line.body);
+          item.label = line.body;
           item.class = "emphasis";
           break;
 
@@ -106,20 +106,20 @@ CVMLParser.prototype.parseContents = function(buffer) {
             section.items.push(item);
             item = {};
           } else {
-            item.label = marked(line.body);
+            item.label = line.body;
           }
           break;
 
         case CVMLModifier.RULE: 
           if (line.body.indexOf('=') !== -1) {
-            item = { class: "separator", label: "", content: "<hr />" };
+            item = { class: "separator", label: "", content: "" };
             section.items.push(item);
             item = {label: "", content: ""};
           }
           break;
 
         case CVMLModifier.PLAIN: 
-            item.content += marked(line.body);
+            item.content += line.body;
           break;
 
         default:
@@ -171,14 +171,27 @@ CVMLParser.prototype.parseLine = function(line) {
 
 };
 
+CVMLParser.prototype.webify = function() {
+  var section;
+  for (var i = 0; i < this.document.contents.length; i++) {
+    section = this.document.contents[i];
+    for (var j = 0; j < section.items.length; j++) {
+      section.items[j].label = marked(section.items[j].label);
+      section.items[j].content = marked(section.items[j].content);
+    }
+  }
+  if (DEBUG) console.log("### MARKDOWN HAS BEEN CONVERTED TO HTML.");
+}
+
 
 
 // Exports ////////////////////////////////////////////////////////////////////
 
-module.exports = function(markup) {
+module.exports = function(markup, toHTML) {
   var parser = new CVMLParser();
   var stub = parser.parseMetaData(markup);
   parser.parseContents(stub);
+  if (toHTML) parser.webify();
   return parser.document;
 };
 
