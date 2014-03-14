@@ -1,0 +1,46 @@
+---
+name: Edgar Exampleson
+title: Curriculum Vitae - Edgar Exampleson
+cssPath: "layouts/default.css"
+---
+
+  / # Curriculum Vitae
+
+=== Personal Details
+
+ -- Name
+    Edgar Exampleson
+
+  - Born
+    05.05.2000, Examplestad (Sweden)
+
+  = =
+
+  - Email
+    [e.ex@example.com](mailto:e.ex@example.com)
+
+=== Employment History
+
+ -- Position
+    This is a job description
+
+  - Responsibilities
+    This is a a short description
+
+  . .
+
+=== Education
+
+  - Period
+    2000 - 3000
+
+ -- Institution
+    University of Exmouth
+
+  - Qualification
+    Degree of higher education
+
+=== References
+
+  - Name
+    This is a reference

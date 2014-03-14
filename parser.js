@@ -142,6 +142,7 @@ CVMLParser.prototype.parseContents = function(buffer) {
     } 
     l++;
   }
+  contents.push(section);
   if (DEBUG) console.log("Successfully parsed " + lines.length + " of CVML!");
   this.document.contents = contents;
   return contents;
@@ -191,6 +192,7 @@ CVMLParser.prototype.webify = function() {
       if (section.items[j].content !== "")
       section.items[j].content = md.toHTML(section.items[j].content);
     }
+    this.document.contents[i] = section;
   }
   if (DEBUG) console.log("### MARKDOWN HAS BEEN CONVERTED TO HTML.");
 }
