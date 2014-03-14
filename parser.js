@@ -38,7 +38,7 @@ var CVMLParser = function() {
 };
 
 CVMLParser.prototype.registerDefaultModifiers = function() {
-  if (!DEBUG) console.log("### REGISTERING DEFAULT MODIFIERS..");
+  if (DEBUG) console.log("### REGISTERING DEFAULT MODIFIERS..");
   this.modifiers = [
        new CVMLModifier("PLAIN", "   "),
        new CVMLModifier("LABEL", "  -"),
@@ -93,12 +93,15 @@ CVMLParser.prototype.parseContents = function(buffer) {
           section = { section: marked(line.body), items: [] };
           break;
 
-        case CVMLModifier.LABEL || CVMLModifier.EMPHASIS:
+        case CVMLModifier.EMPHASIS:
+          item.label = marked(line.body);
+          item.class = "emphasis";
+          break;
+
+        case CVMLModifier.LABEL:
           if (item.label !== "" && typeof section === "object") {
             section.items.push(item);
-            item = { label: marked(line.body), content: "" }
-            if (CVMLModifier[line.type.label] === CVMLModifier.EMPHASIS)
-              item.emphasis = true;
+            item = { label: "", content: "" }
           } else {
             item.label = marked(line.body);
           }
@@ -106,7 +109,7 @@ CVMLParser.prototype.parseContents = function(buffer) {
 
         case CVMLModifier.RULE: 
           if (line.body.indexOf('=') !== -1) {
-            item = { separator: true, label: "", content: "<hr />" };
+            item = { class: "separator", label: "", content: "<hr />" };
             section.items.push(item);
             item = {label: "", content: ""};
           }
@@ -145,8 +148,10 @@ CVMLParser.prototype.parseLine = function(line) {
       console.log("##############################################################");
       console.log(content);
       console.log("##############################################################");
-    } else if (type.label === "LABEL" || type.label === "EMPHASIS") {
+    } else if (type.label === "LABEL") {
       console.log("[[[ "+content+" ]]]");
+    } else if (type.label === "EMPHASIS") {
+      console.log("<<<[[[ "+content+" ]]]>>>");
     } else if (type.label === "RULE") {
       console.log("\n= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =\n");
     } else {
