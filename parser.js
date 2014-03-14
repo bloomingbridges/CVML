@@ -4,7 +4,7 @@ var DEBUG = false;
 // Dependencies ///////////////////////////////////////////////////////////////
 
 var fm = require("front-matter")
-  , marked = require("marked");
+  , md = require("markdown").markdown;
 
 
 
@@ -17,12 +17,13 @@ var CVMLModifier = function(label, stub) {
 };
 
 CVMLModifier.UNRECOGNISED = -1;
-CVMLModifier.PLAIN    = 0;
-CVMLModifier.LABEL    = 1;
-CVMLModifier.EMPHASIS = 2;
-CVMLModifier.SECTION  = 3;
-CVMLModifier.RULE     = 4;
-CVMLModifier.TITLE    = 5;
+CVMLModifier.PLAIN        = 0;
+CVMLModifier.LABEL        = 1;
+CVMLModifier.EMPHASIS     = 2;
+CVMLModifier.SECTION      = 3;
+CVMLModifier.RULE         = 4;
+CVMLModifier.TITLE        = 5;
+CVMLModifier.PAGEBREAK    = 6;
 
 
 
@@ -45,7 +46,8 @@ CVMLParser.prototype.registerDefaultModifiers = function() {
     new CVMLModifier("EMPHASIS", " --"),
      new CVMLModifier("SECTION", "==="),
         new CVMLModifier("RULE", "  ="),
-       new CVMLModifier("TITLE", "  /")
+       new CVMLModifier("TITLE", "  /"),
+   new CVMLModifier("PAGEBREAK", "  .")
   ];
   // if (DEBUG) console.log(this.modifiers);
 };
@@ -72,7 +74,7 @@ CVMLParser.prototype.parseContents = function(buffer) {
   var lines = buffer.split("\n")
     , contents = []
     , section
-    , item = { label: "", content: "" }
+    , item = { label: "", content: "", type: "text" }
     , line
     , l = 0;
 
@@ -98,7 +100,7 @@ CVMLParser.prototype.parseContents = function(buffer) {
 
         case CVMLModifier.EMPHASIS:
           item.label = line.body;
-          item.class = "emphasis";
+          item.type = "emphasis";
           break;
 
         case CVMLModifier.LABEL:
@@ -112,9 +114,17 @@ CVMLParser.prototype.parseContents = function(buffer) {
 
         case CVMLModifier.RULE: 
           if (line.body.indexOf('=') !== -1) {
-            item = { class: "separator", label: "", content: "" };
+            item = { type: "separator", label: "", content: "" };
             section.items.push(item);
-            item = {label: "", content: ""};
+            item = { label: "", content: "", type: "text" };
+          }
+          break;
+
+        case CVMLModifier.PAGEBREAK:
+          if (line.body.indexOf('.') !== -1) {
+            item = { type: "pagebreak", label: "", content: "" };
+            section.items.push(item);
+            item = { label: "", content: "", type: "text" };
           }
           break;
 
@@ -127,7 +137,7 @@ CVMLParser.prototype.parseContents = function(buffer) {
       }
       if (item.content !== "") {
         section.items.push(item);
-        item = {label: "", content: ""};
+        item = { label: "", content: "", type: "text" };
       }
     } 
     l++;
@@ -176,8 +186,10 @@ CVMLParser.prototype.webify = function() {
   for (var i = 0; i < this.document.contents.length; i++) {
     section = this.document.contents[i];
     for (var j = 0; j < section.items.length; j++) {
-      section.items[j].label = marked(section.items[j].label);
-      section.items[j].content = marked(section.items[j].content);
+      if (section.items[j].label !== "")
+        section.items[j].label = md.toHTML(section.items[j].label);
+      if (section.items[j].content !== "")
+      section.items[j].content = md.toHTML(section.items[j].content);
     }
   }
   if (DEBUG) console.log("### MARKDOWN HAS BEEN CONVERTED TO HTML.");

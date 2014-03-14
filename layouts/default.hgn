@@ -21,7 +21,7 @@
                 </thead>
                 <tbody>
                     {{#items}}
-                    <tr class="item {{class}}">
+                    <tr class="item {{type}}">
                         <td class="label">{{{label}}}</td>
                         <td>{{{content}}}</td>
                     </tr>

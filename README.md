@@ -39,6 +39,8 @@ _CVML_ is a markup language for the [pdfkit](http://pdfkit.org) module, but can 
       - Email
         [e.ex@example.com](mailto:e.ex@example.com) <-- markdown link
 
+      . . <-- Denotes a Page Break (PDF only)
+
 Preview output using default template:
 
 ![Example output](http://drop.lostwith.us/preview/cvml_example_output.png)
@@ -49,7 +51,7 @@ Preview output using default template:
 
     -h, --help                 output usage information
     -v, --verbose              Enable "Verbose Output"
-    -t, --template [template]  Define a template other than the default one
+    -t, --template [template]  Define a HTML template other than the default one
 
     -p, --pdf                  Produces a PDF (default)
     -w, --html                 Produces a HTML document instead

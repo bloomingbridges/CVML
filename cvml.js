@@ -10,7 +10,8 @@ var fs = require("fs")
 
 // Modules ////////////////////////////////////////////////////////////////////
 
-var cvp = require("./parser.js");
+var cvp = require("./parser.js")
+  , cvr = require("./renderer.js");
 
 
 
@@ -90,13 +91,16 @@ function generatePDF(template, data) {
     doc.moveDown();
     for (var j=0; j < section.items.length; j++) {
       var item = section.items[j];
-      if (item.hasOwnProperty("class") && item.class === "emphasis") {
+      if (item.hasOwnProperty("type") && item.type === "emphasis") {
         doc.fontSize(18);
       }
-      else if (item.hasOwnProperty("class") && item.class === "separator") {
+      else if (item.hasOwnProperty("type") && item.type === "separator") {
         doc.rect(140,doc.y-2,580,1);
         doc.fill('#ededed');
         doc.moveDown();
+      }
+      else if (item.hasOwnProperty("type") && item.type === "pagebreak") {
+        doc.addPage();
       }
       else {
         doc.fontSize(12);
