@@ -24,7 +24,13 @@ td {
     border: none;
     border-collapse: collapse;
     vertical-align: top;
-    border-bottom: 1px solid rgb(210,137,227);
+    /*border-bottom: 1px solid rgb(210,137,227);*/
+}
+
+hr {
+    height: 2em;
+    border: none;
+    background: transparent;
 }
 
 .section_header th {

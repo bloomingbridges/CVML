@@ -90,15 +90,25 @@ CVMLParser.prototype.parseContents = function(buffer) {
           if (typeof section === "object" && section.items.length > 0) {
             contents.push(section);
           }
-          section = { section: line.body, items: [] };
+          section = { section: marked(line.body), items: [] };
           break;
 
-        case CVMLModifier.LABEL:
+        case CVMLModifier.LABEL || CVMLModifier.EMPHASIS:
           if (item.label !== "" && typeof section === "object") {
             section.items.push(item);
             item = { label: marked(line.body), content: "" }
+            if (CVMLModifier[line.type.label] === CVMLModifier.EMPHASIS)
+              item.emphasis = true;
           } else {
-            item.label = line.body;
+            item.label = marked(line.body);
+          }
+          break;
+
+        case CVMLModifier.RULE: 
+          if (line.body.indexOf('=') !== -1) {
+            item = { separator: true, label: "", content: "<hr />" };
+            section.items.push(item);
+            item = {label: "", content: ""};
           }
           break;
 
@@ -147,7 +157,7 @@ CVMLParser.prototype.parseLine = function(line) {
     }
   }
 
-  return { type: type, body: marked(content) };
+  return { type: type, body: content };
 
 };
 
