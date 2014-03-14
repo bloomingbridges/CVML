@@ -1,15 +1,22 @@
 {
   "name": "CVML",
+  "version": "0.0.3",
+  "description": "Curriculum Vitae Markup Language Specification, Parser and PDF / HTML generator",
+  "preferGlobal": "true",
+  "main": "cvml.js",
+  "bin": { "cvml": "cvml.js" },
+  "author": "bloomingbridges",
+  "keywords": ["CV", "cvml", "pdf", "parser", "official"],
   "repository" : { 
     "type" : "git", 
     "url" : "https://github.com/bloomingbridges/CVML.git"
   },
-  "description": "Curriculum Vitae Markup Language Specification, Interpreter and PDF generator",
   "dependencies": {
-    "markdown": "*",
     "commander": "*",
     "front-matter": "*",
+    "markdown": "*",
     "hogan.js": "*",
     "pdfkit": "*"
-  }
+  },
+  "engines": { "node": "*" }
 }
