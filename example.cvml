@@ -4,8 +4,6 @@ title: Curriculum Vitae - Edgar Exampleson
 cssPath: "layouts/default.css"
 ---
 
-  / # Curriculum Vitae
-
 === Personal Details
 
  -- Name
@@ -19,6 +17,8 @@ cssPath: "layouts/default.css"
   - Email
     [e.ex@example.com](mailto:e.ex@example.com)
 
+
+
 === Employment History
 
  -- Position
@@ -27,7 +27,7 @@ cssPath: "layouts/default.css"
   - Responsibilities
     This is a a short description
 
-  . .
+
 
 === Education
 
@@ -39,6 +39,12 @@ cssPath: "layouts/default.css"
 
   - Qualification
     Degree of higher education
+
+
+
+  . .
+
+
 
 === References
 

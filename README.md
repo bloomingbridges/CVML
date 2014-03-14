@@ -24,8 +24,6 @@ _CVML_ is a markup language for the [pdfkit](http://pdfkit.org) module, but can 
     cssPath: default.css
     --- <-- YAML metadata
 
-        # Curriculum Vitae <-- Plain markdown heading
-
     === Personal Details <-- Start a new section
 
      -- Name <-- Important row
