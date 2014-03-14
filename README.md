@@ -53,3 +53,12 @@ Preview output using default template:
 
     -p, --pdf                  Produces a PDF (default)
     -w, --html                 Produces a HTML document instead
+
+### TODO
+
+- Finalise _CVML_ syntax and features
+- Fix parsing / display of inline formatting (WTF bold text?)
+- Write tutorial on how to extend the default PDF renderer in order to make your custom layout
+- Package everything up in a nice little NPM module and make it work from everywhere
+- (Add a print stylesheet to the HTML example)
+- (Clean up after myself..)
