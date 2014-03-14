@@ -41,10 +41,11 @@ CVMLRenderer.prototype.processDataTree = function() {
 };
 
 CVMLRenderer.prototype.beginSection = function(title) {
+  this.document.fillColor('#000');
   this.document.fontSize(22);
   this.document.moveDown();
   this.document.text(title, { align: 'right' });
-  this.document.rect(0,this.document.y,700,3);
+  this.document.rect(145,this.document.y,700,3);
   this.document.fill('#D289E3');
   this.document.moveDown();
 };
@@ -67,6 +68,7 @@ CVMLRenderer.prototype.renderItem = function(item) {
   if (item.label)
     this.renderLabel(item.label);
 
+  this.document.fillColor('#000');
   var contentStack = md.parse(item.content);
   contentStack.shift();
   for (var i = 0; i < contentStack.length; i++) {
