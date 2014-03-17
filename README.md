@@ -62,5 +62,4 @@ Preview output using default template:
 - Finalise _CVML_ syntax and features
 - Write tutorial on how to extend the default PDF renderer in order to make your custom layout
 - Package everything up in a nice little NPM module and make it work from everywhere
-- (Add a print stylesheet to the HTML example)
 - (Clean up after myself..)
