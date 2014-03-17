@@ -144,7 +144,9 @@ if (cmd.style) {
 if (cmd.html) {
   var template = Hogan.compile(loadTemplate());
   if (!content.metadata.cssPath)
-    content.metadata.cssPath = "../layouts/default.css";
+    content.metadata.cssPath = "layouts/default.css";
+  stylesheet = loadStylesheet(content.metadata.cssPath);
+  content.styles = stylesheet;
   generateHTML(template, content);
 } 
 else {
