@@ -94,8 +94,9 @@ CVMLRenderer.prototype.renderItem = function(item) {
     this.document.fillColor(this.styles.textColour);
   }
 
-  if (item.label)
+  if (item.label) {
     this.renderLabel(item.label);
+  }
 
   this.document.fillColor(this.styles.textColour);
 
@@ -103,13 +104,14 @@ CVMLRenderer.prototype.renderItem = function(item) {
   contentStack.shift();
   for (var i = 0; i < contentStack.length; i++) {
     var element = contentStack[i];
-    if (element[0] === "para" && typeof element[1] === 'string')
-      this.renderText(element[1], false);
+    if (element.length === 2 && typeof element[1] === 'string')
+      this.renderText(element[1], undefined);
     else {
       element.shift();
       var paragraph = element;
       for (var p = 0; p < paragraph.length; p++) {
-        this.renderRichParagraphItem(paragraph[p], p === paragraph.length-1);
+        var continued = (p === paragraph.length-1) ? undefined : true;
+        this.renderRichParagraphItem(paragraph[p], continued);
       }
     }
   }
@@ -135,7 +137,10 @@ CVMLRenderer.prototype.renderRichParagraphItem = function(item, ultimate) {
                       , height
                       , link.href);
   } else if (item[0] === "strong") {
-    this.document.fillColor(this.styles.textColour);
+    this.document.fillColor(this.styles.linkUnderlineColour);
+    this.renderText(item[1], ultimate);
+  } else if (item[0] === "em") {
+    this.document.fillColor(this.styles.sectionHeaderColour);
     this.renderText(item[1], ultimate);
   } else if (typeof item === "string") {
     this.document.fillColor(this.styles.textColour);
@@ -156,7 +161,10 @@ CVMLRenderer.prototype.renderSeparator = function(label) {
 // Override if you want to change the appearance (not the layout) of labels
 CVMLRenderer.prototype.renderLabel = function(label) {
   this.document.fillColor(this.styles.labelColour);
-  this.document.text(label, { width: this.styles.labelColumnWidth, align: 'right' });
+  this.document.text( label
+                    , {  width: this.styles.labelColumnWidth
+                      , align: 'right' 
+                      , continued: false });
 };
 
 // Nothing to override here
@@ -166,7 +174,8 @@ CVMLRenderer.prototype.renderText = function(text, continued) {
   this.document.translate(this.styles.labelColumnWidth + 20, 0);
   this.document.text( text
                     , { width: this.document.page.width - this.styles.labelColumnWidth - 60
-                    , lineGap: this.styles.textLeading });
+                      , lineGap: this.styles.textLeading
+                      , continued: continued });
   this.document.moveDown();
   this.document.restore();
 };
