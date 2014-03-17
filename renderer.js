@@ -17,10 +17,10 @@ var CVMLRenderer = function(data) {
 };
 
 CVMLRenderer.prototype.styles = {
-                textFont: "",
-                decoFont: "",
-                boldFont: "",
-              italicFont: "",
+                textFont: "Helvetica",
+                decoFont: "Helvetica",
+                boldFont: "Helvetica-Bold",
+              italicFont: "Helvetica-Oblique",
               textColour: '#000',
              labelColour: '#666',
          separatorColour: '#EDEDED',
@@ -137,12 +137,13 @@ CVMLRenderer.prototype.renderRichParagraphItem = function(item, ultimate) {
                       , height
                       , link.href);
   } else if (item[0] === "strong") {
-    this.document.fillColor(this.styles.linkUnderlineColour);
+    this.document.font(this.styles.boldFont);
     this.renderText(item[1], ultimate);
   } else if (item[0] === "em") {
-    this.document.fillColor(this.styles.sectionHeaderColour);
+    this.document.font(this.styles.italicFont);
     this.renderText(item[1], ultimate);
   } else if (typeof item === "string") {
+    this.document.font(this.styles.textFont);
     this.document.fillColor(this.styles.textColour);
     this.renderText(item, ultimate);
   }
@@ -160,6 +161,7 @@ CVMLRenderer.prototype.renderSeparator = function(label) {
 
 // Override if you want to change the appearance (not the layout) of labels
 CVMLRenderer.prototype.renderLabel = function(label) {
+  this.document.font(this.styles.textFont);
   this.document.fillColor(this.styles.labelColour);
   this.document.text( label
                     , {  width: this.styles.labelColumnWidth
