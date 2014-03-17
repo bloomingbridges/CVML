@@ -49,9 +49,10 @@ Preview output using default template:
 
     $ node cvml.js [options] <myfilename.cvml>
 
-    -h, --help                 output usage information
+    -h, --help                 Output Usage Information
     -v, --verbose              Enable "Verbose Output"
-    -t, --template [template]  Define a HTML template other than the default one
+
+    -s, --style [stylesheet]   Provide a custom stylesheet file in .json / .css format - overrides 'cssPath'
 
     -p, --pdf                  Produces a PDF (default)
     -w, --html                 Produces a HTML document instead

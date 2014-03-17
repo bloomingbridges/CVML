@@ -116,8 +116,8 @@ function generatePDF(renderer, data) {
 cmd
   .usage('[options] <file ...>')
   .option('-v, --verbose', 'Enable "Verbose Output"')
-  .option('-t, --template [template]', 'Define a HTML template other than the default one', 'template')
-  .option('-s, --style [stylesheet]', 'Provide a stylesheet in JSON format or override cssPath property in document.')
+  // .option('-t, --template [template]', 'Provide a custom HTML template', 'template')
+  .option('-s, --style [stylesheet]', 'Provide a custom stylesheet ( JSON | CSS )')
   .option('-p, --pdf', 'Produces a PDF (default)')
   .option('-w, --html', 'Produces a HTML document instead')
   .parse(process.argv);
