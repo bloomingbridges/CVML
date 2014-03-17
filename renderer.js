@@ -100,22 +100,57 @@ CVMLRenderer.prototype.renderItem = function(item) {
 
   this.document.fillColor(this.styles.textColour);
 
-  var contentStack = md.parse(item.content);
-  contentStack.shift();
-  for (var i = 0; i < contentStack.length; i++) {
-    var element = contentStack[i];
-    if (element.length === 2 && typeof element[1] === 'string')
-      this.renderText(element[1], undefined);
-    else {
-      element.shift();
-      var paragraph = element;
-      for (var p = 0; p < paragraph.length; p++) {
-        var continued = (p === paragraph.length-1) ? undefined : true;
-        this.renderRichParagraphItem(paragraph[p], continued);
-      }
+  var contentStack = this.parseMarkdownContent(item.content);
+  if (contentStack) {
+    var stack = contentStack.stack;
+    switch (contentStack.container) {
+      case "para":
+        if (stack.length === 1 && typeof stack[0] === 'string')
+          this.renderText(stack.pop(), false);
+        else
+          this.renderComplexItem(stack);
+        break;
+      case "bulletlist":
+        this.beginListItem();
+        stack = stack[0];
+        stack.shift();
+        // console.log("\n"+contentStack.container+" >>>>\n", stack);
+        this.renderComplexItem(stack);
+        // console.log("<<<<\n");
+        break;
     }
   }
+};
 
+CVMLRenderer.prototype.parseMarkdownContent = function(content) {
+  var contentStack = { container: "", stack: null};
+  if (content !== "") {
+    var results = md.parse(content);
+    results.shift();
+    results = results[0];
+    contentStack.container = results[0];
+    results.shift();
+    contentStack.stack = results;
+    return contentStack;
+  }
+  else
+    return false;
+};
+
+CVMLRenderer.prototype.renderComplexItem = function(stack) {
+  for (var p = 0; p < stack.length; p++) {
+    var continued = (p === stack.length-1) ? undefined : true;
+    this.renderRichParagraphItem(stack[p], continued);
+  }
+};
+
+CVMLRenderer.prototype.beginListItem = function() {
+  this.document.rect( this.styles.labelColumnWidth + 25
+                      , this.document.y - this.document.currentLineHeight() - this.styles.textLeading
+                      , 1
+                      , this.document.currentLineHeight() + (this.styles.textLeading / 2));
+  this.document.fill(this.styles.separatorColour);
+  this.document.fillColor(this.styles.textColour);
 };
 
 // Don't override if you want to live!
@@ -146,6 +181,8 @@ CVMLRenderer.prototype.renderRichParagraphItem = function(item, ultimate) {
     this.document.font(this.styles.textFont);
     this.document.fillColor(this.styles.textColour);
     this.renderText(item, ultimate);
+  } else {
+    console.log("WARNING Unrecognised Item:", item);
   }
 };
 
