@@ -32,6 +32,8 @@ _CVML_ is a markup language for the [pdfkit](http://pdfkit.org) module, but can 
       - Born <-- Standard row
         05.05.2000, Examplestad (Sweden)
 
+    /// I'm a <-- comment
+
       = = <-- Separator
 
       - Email
