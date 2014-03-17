@@ -78,7 +78,7 @@ CVMLParser.prototype.parseContents = function(buffer) {
     , line
     , l = 0;
 
-  console.log("### LINES OF CVML TO PARSE:", lines.length);
+  if (DEBUG) console.log("### LINES OF CVML TO PARSE:", lines.length);
 
   while (l < lines.length) {
     line = lines[l];

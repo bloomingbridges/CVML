@@ -1,0 +1,19 @@
+{
+                "textFont": "Helvetica Neue",
+                "decoFont": "",
+                "boldFont": "",
+              "italicFont": "",
+              "textColour": "#000",
+             "labelColour": "#666",
+         "separatorColour": "#EDEDED",
+              "linkColour": "#666",
+     "linkUnderlineColour": "#000",
+     "sectionHeaderColour": "#666",
+                "fontSize": 12,
+           "highlightSize": 18,
+   "sectionHeaderFontSize": 22,
+             "textLeading": 6,
+  "sectionHeaderThickness": 3,
+      "separatorThickness": 1,
+        "labelColumnWidth": 120
+}

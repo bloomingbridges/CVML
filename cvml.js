@@ -16,7 +16,7 @@ var cvp = require("./parser.js")
 
 // Globals ////////////////////////////////////////////////////////////////////
 
-var content, template;
+var content, template, stylesheet;
 
 
 
@@ -78,17 +78,26 @@ function loadMarkup(file) {
     data = fs.readFileSync("./"+file, 'utf8');
   } else {
     console.log("### ERROR CVML file not found! Proceeding using example data..");
-    data = fs.readFileSync("./example.cvml", 'utf8');
+    data = fs.readFileSync("examples/example.cvml", 'utf8');
   }
   
   if (cmd.verbose) console.log("### PARSING MARKUP..");
   return cvp(data, cmd.html);
 }
 
+function loadStylesheet(file) {
+  if ( fs.existsSync(file) ) {
+    return fs.readFileSync("./"+file, 'utf8');
+  } else {
+    console.log("### ERROR Couldn't locate stylesheet at '" + file + "'");
+    return null;
+  }
+}
+
 function generateHTML(template, data) {
   var buffer = template.render(data);
   // if (cmd.verbose) console.log("### PREVIEW\n", buffer, "\n### EOF");
-  fs.writeFile(data.metadata.name.replace(/ /gi, "_")+'_CV.html', buffer, function (err) {
+  fs.writeFile("output/" + data.metadata.name.replace(/ /gi, "_")+'_CV.html', buffer, function (err) {
     if (err) throw err;
     console.log("### HTML GENERATED!");
   });
@@ -108,6 +117,7 @@ cmd
   .usage('[options] <file ...>')
   .option('-v, --verbose', 'Enable "Verbose Output"')
   .option('-t, --template [template]', 'Define a HTML template other than the default one', 'template')
+  .option('-s, --style [stylesheet]', 'Provide a stylesheet in JSON format or override cssPath property in document.')
   .option('-p, --pdf', 'Produces a PDF (default)')
   .option('-w, --html', 'Produces a HTML document instead')
   .parse(process.argv);
@@ -117,15 +127,30 @@ if (cmd.args.length > 0) {
   content = loadMarkup(file);
 } else {
   console.log("### ERROR No CVML file specified! Proceeding using example data..");
-  content = loadMarkup("example.cvml");
+  content = loadMarkup("examples/example.cvml");
+}
+
+if (cmd.style) {
+  var extension = cmd.style.match(/^.*\.(json|css)$/);
+  if (extension && extension[1] === "json") {
+    stylesheet = loadStylesheet(cmd.style);
+  } else if (extension && extension[1] === "css") {
+    content.metadata.cssPath = cmd.style;
+  } else {
+    console.log("### ERROR Couldn't determine stylesheet format.");
+  }
 }
 
 if (cmd.html) {
   var template = Hogan.compile(loadTemplate());
+  if (!content.metadata.cssPath)
+    content.metadata.cssPath = "../layouts/default.css";
   generateHTML(template, content);
 } 
 else {
   if (cmd.verbose) console.log("### PRODUCING PDF..");
+  if (stylesheet)
+    cvr.prototype.styles = JSON.parse(stylesheet);
   generatePDF(cvr, content);
 }
 

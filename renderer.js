@@ -177,7 +177,7 @@ CVMLRenderer.prototype.endSection = function() {
 
 // Override this function if you want a custom file naming format
 CVMLRenderer.prototype.getFilename = function() {
-  return this.data.metadata.name.replace(/ /gi, "_")+'_CV.pdf'
+  return "output/" + this.data.metadata.name.replace(/ /gi, "_")+'_CV.pdf'
 };
 
 // Nothing to override here
