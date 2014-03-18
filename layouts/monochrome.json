@@ -15,5 +15,6 @@
              "textLeading": 6,
   "sectionHeaderThickness": 3,
       "separatorThickness": 1,
-        "labelColumnWidth": 120
+        "labelColumnWidth": 120,
+       "horizontalPadding": 60
 }

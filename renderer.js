@@ -14,10 +14,19 @@ var CVMLRenderer = function(data, prototype) {
     this.author = "bloomingbridges";
     if (prototype)
       this.extend(prototype);
-    this.document = this.beginDocument({});
+    this.document = this.beginDocument(this.styles.dimensions);
 };
 
 CVMLRenderer.prototype.styles = {
+              dimensions: {
+                    size: "a4",
+                 margins: { 
+                     top: 50, 
+                   right: 45, 
+                  bottom: 15, 
+                    left: 15
+                          }
+                          },
                 textFont: "Helvetica",
                 decoFont: "Helvetica",
                 boldFont: "Helvetica-Bold",
@@ -53,9 +62,8 @@ CVMLRenderer.prototype.applyStylesheet = function(stylesheet) {
   }
 };
 
-CVMLRenderer.prototype.beginDocument = function(options) {
-  // TODO parse [options] parameter
-  var doc =  new PDFDocument( { size: "a4", margins: { top: 50, right: 20, bottom: 15, left: 15 } } );
+CVMLRenderer.prototype.beginDocument = function(dimensions) {
+  var doc =  new PDFDocument( dimensions );
   doc.info.Title = this.data.metadata.title;
   // TODO: Add the remaining metadata fields
   return doc;
@@ -229,7 +237,10 @@ CVMLRenderer.prototype.renderText = function(text, continued) {
   this.document.moveUp();
   this.document.translate(this.styles.labelColumnWidth + 20, 0);
   this.document.text( text
-                    , { width: this.document.page.width - this.styles.labelColumnWidth - 60
+                    , { width: this.document.page.width 
+                             - this.styles.labelColumnWidth 
+                             - this.styles.dimensions.margins.left 
+                             - this.styles.dimensions.margins.right
                       , lineGap: this.styles.textLeading
                       , continued: continued });
   this.document.moveDown();
@@ -237,8 +248,10 @@ CVMLRenderer.prototype.renderText = function(text, continued) {
 };
 
 // Override this function if you need extra whitespace after each section
-CVMLRenderer.prototype.endSection = function() {
-};
+CVMLRenderer.prototype.endSection = function() {};
+
+// Override this if you want to add a signature to the end of your document
+CVMLRenderer.prototype.signDocument = function() {};
 
 // Override this function if you want a custom file naming format
 CVMLRenderer.prototype.getFilename = function() {
@@ -249,6 +262,7 @@ CVMLRenderer.prototype.getFilename = function() {
 CVMLRenderer.prototype.producePDF = function() {
   this.renderTitle();
   this.processDataTree();
+  this.signDocument();
   this.document.write(this.getFilename());
 };
 
