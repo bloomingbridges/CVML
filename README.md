@@ -52,6 +52,7 @@ Preview output using default template:
     -h, --help                 Output Usage Information
     -v, --verbose              Enable "Verbose Output"
 
+    -r, --renderer [extension] Use a custom PDF renderer
     -s, --style [stylesheet]   Provide a custom stylesheet file in .json / .css format - overrides 'cssPath'
 
     -p, --pdf                  Produces a PDF (default)
