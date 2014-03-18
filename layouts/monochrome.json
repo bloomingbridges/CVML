@@ -1,8 +1,8 @@
 {
-                "textFont": "Helvetica Neue",
-                "decoFont": "",
-                "boldFont": "",
-              "italicFont": "",
+                "textFont": "Helvetica",
+                "decoFont": "Helvetica",
+                "boldFont": "Helvetica-Bold",
+              "italicFont": "Helvetica-Oblique",
               "textColour": "#000",
              "labelColour": "#666",
          "separatorColour": "#EDEDED",

@@ -8,12 +8,13 @@ var md = require("markdown").markdown
 
 // CVMLRenderer ///////////////////////////////////////////////////////////////
 
-var CVMLRenderer = function(data) {
+var CVMLRenderer = function(data, prototype) {
     this.data = data;
+    this.description = "Generic CV Renderer";
     this.author = "bloomingbridges";
+    if (prototype)
+      this.extend(prototype);
     this.document = this.beginDocument({});
-    this.renderTitle();
-    this.processDataTree();
 };
 
 CVMLRenderer.prototype.styles = {
@@ -34,6 +35,22 @@ CVMLRenderer.prototype.styles = {
   sectionHeaderThickness: 3,
       separatorThickness: 1,
         labelColumnWidth: 120
+};
+
+CVMLRenderer.prototype.extend = function(prototype) {
+  if (prototype.styles) {
+    this.applyStylesheet(prototype.styles);
+    delete prototype.styles;
+  }
+  for (method in prototype) {
+    this[method] = prototype[method];
+  }
+};
+
+CVMLRenderer.prototype.applyStylesheet = function(stylesheet) {
+  for (s in stylesheet) {
+    this.styles[s] = stylesheet[s];
+  }
 };
 
 CVMLRenderer.prototype.beginDocument = function(options) {
@@ -74,7 +91,7 @@ CVMLRenderer.prototype.beginSection = function(title) {
                     , 700
                     , this.styles.sectionHeaderThickness);
   this.document.fill(this.styles.sectionHeaderColour);
-  this.document.moveDown();
+  this.document.moveDown(1.5);
 };
 
 // Unlikely anything to override here..
@@ -230,6 +247,8 @@ CVMLRenderer.prototype.getFilename = function() {
 
 // Nothing to override here
 CVMLRenderer.prototype.producePDF = function() {
+  this.renderTitle();
+  this.processDataTree();
   this.document.write(this.getFilename());
 };
 

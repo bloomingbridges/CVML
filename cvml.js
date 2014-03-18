@@ -16,48 +16,7 @@ var cvp = require("./parser.js")
 
 // Globals ////////////////////////////////////////////////////////////////////
 
-var content, template, stylesheet;
-
-
-
-// Fixtures ///////////////////////////////////////////////////////////////////
-
-// var exampleData = {
-//   metadata: {
-//     name: "Edgar Exampleson",
-//     title: "Curriculum Vitae",
-//     cssPath: "layouts/default.css"
-//   },
-//   contents: [
-//     {
-//       section: "Personal Details",
-//       items: [
-//         { label: "Name", content: "**Edgar Exampleson**" },
-//         { label: "Born", content: "05.05.1000, Exempelstad (Sweden)" }
-//       ]
-//     },
-//     {
-//       section: "Employment History",
-//       items: [
-//         { label: "Position", content: "This is a job description" },
-//         { label: "Responsibilities", content: "This is a list of responsibilities and duties that I.." },
-//         { type: "pagebreak" }
-//       ]
-//     },
-//     {
-//       section: "Education",
-//       items: [
-//         { label: "Period", content: "2000 - 3000" },
-//         { label: "Institution", content: "University of Examplemouth" },
-//         { label: "Qualification", content: "This is a Qualification" }
-//       ]
-//     },
-//     {
-//       section: "References",
-//       items: [{ label: "Name", content: "This is a reference" }]
-//     }
-//   ]
-// };
+var content, template, stylesheet, renderer, rendererExtension;
 
 
 
@@ -85,6 +44,15 @@ function loadMarkup(file) {
   return cvp(data, cmd.html);
 }
 
+function loadRendererExtension(file) {
+  if ( fs.existsSync(file) ) {
+    return require(file);
+  } else {
+    console.log("### ERROR Couldn't locate renderer at '" + file + "'");
+    return null;
+  }
+}
+
 function loadStylesheet(file) {
   if ( fs.existsSync(file) ) {
     return fs.readFileSync("./"+file, 'utf8');
@@ -103,9 +71,8 @@ function generateHTML(template, data) {
   });
 }
 
-function generatePDF(renderer, data) {
-  var myRenderer = new renderer(data);
-  myRenderer.producePDF();
+function generatePDF(renderer) {
+  renderer.producePDF();
   if (cmd.verbose) console.log("### DONE!");
 }
 
@@ -117,6 +84,7 @@ cmd
   .usage('[options] <file ...>')
   .option('-v, --verbose', 'Enable "Verbose Output"')
   // .option('-t, --template [template]', 'Provide a custom HTML template', 'template')
+  .option('-r, --renderer [extension]', 'Use a custom PDF renderer')
   .option('-s, --style [stylesheet]', 'Provide a custom stylesheet ( JSON | CSS )')
   .option('-p, --pdf', 'Produces a PDF (default)')
   .option('-w, --html', 'Produces a HTML document instead')
@@ -128,6 +96,13 @@ if (cmd.args.length > 0) {
 } else {
   console.log("### ERROR No CVML file specified! Proceeding using example data..");
   content = loadMarkup("examples/example.cvml");
+}
+
+if (cmd.renderer) {
+  if (cmd.renderer === true)
+    console.log("### ERROR No renderer specified!");
+  else
+    rendererExtension = loadRendererExtension(cmd.renderer);
 }
 
 if (cmd.style) {
@@ -150,10 +125,30 @@ if (cmd.html) {
   generateHTML(template, content);
 } 
 else {
+
   if (cmd.verbose) console.log("### PRODUCING PDF..");
-  if (stylesheet)
-    cvr.prototype.styles = JSON.parse(stylesheet);
-  generatePDF(cvr, content);
+
+  if (cmd.renderer) {
+    renderer = new cvr(content, rendererExtension);
+    if (cmd.verbose) console.log("### USING CUSTOM RENDERER: '" 
+               + renderer.description 
+               + "' by " 
+               + renderer.author);
+  } else {
+    renderer = new cvr(content, rendererExtension);
+    if (cmd.verbose) console.log("### USING '" 
+                                + renderer.description 
+                                + "' by " 
+                                + renderer.author);
+  }
+
+  if (stylesheet) {
+    if (cmd.verbose) console.log("### USING CUSTOM STYLESHEET");
+    renderer.applyStylesheet(JSON.parse(stylesheet));
+  }
+
+  generatePDF(renderer);
+
 }
 
 
